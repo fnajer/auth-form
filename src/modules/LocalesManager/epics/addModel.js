@@ -10,7 +10,7 @@ import {
   addModel,
 } from '../actions'
 
-export function createModel({ code, data }) {
+export function createModel(code, data) {
   const token = localLoadAuth('token')
   return axios({
     url: `${API_BASE}/translation`,
@@ -34,7 +34,6 @@ const addModelEpic = action$ =>
     ofType(addModel),
     switchMap(
       ({ payload }) => createModel(
-        payload.token, 
         payload.code,
         payload.data
       ),

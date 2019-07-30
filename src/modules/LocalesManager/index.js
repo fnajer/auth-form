@@ -11,8 +11,8 @@ class LocalesManager extends React.Component {
       { title: 'Keyword', field: 'name' },
       { title: 'Translation', field: 'native', editable: 'onUpdate' },
       { title: 'Lexicon', field: 'lexicon', type: 'numeric' },
-      { title: 'Created', field: 'created', editable: 'never', render: ({ created }) => new Date(created).toLocaleString()},
-      { title: 'Updated', field: 'updated', editable: 'never', render: ({ updated }) => new Date(updated).toLocaleString() },
+      { title: 'Created', field: 'created', editable: 'never', render: props => props ? new Date(props.created).toLocaleString() : '' },
+      { title: 'Updated', field: 'updated', editable: 'never', render: props => props ? new Date(props.updated).toLocaleString() : '' },
     ]
   }
 
