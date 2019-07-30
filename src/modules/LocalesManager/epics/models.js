@@ -24,7 +24,8 @@ export function fetchModels({ code }) {
     retry: fetchModels,
     params: {
       code
-    }
+    },
+    defaultValue: []
   }))
 }
 
@@ -40,7 +41,8 @@ const loadModelsListEpic = action$ =>
       (action, response) => [response, action]
     ),
     map(([response, action]) => {
-      return updateModelsList(response.data)
+      const modelsData = prepareModelsResponse(response)
+      return updateModelsList(modelsData)
     }),
     catchError(error => {
       console.log(error)

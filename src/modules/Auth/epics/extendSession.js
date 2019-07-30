@@ -10,7 +10,12 @@ export function extendSession() {
   const secret = localLoadAuth('secret')
   const id = localLoadAuth('id')
 
-   return secret 
+  if (!secret || !id) {
+    updateAuth(null)
+    return Promise.resolve(null)
+  }
+
+  return secret 
     ? fetchExtendSession(id, secret) 
     : Promise.resolve(null)
 }
@@ -28,8 +33,7 @@ function fetchExtendSession(id, secret) {
   }).catch(error => {
     console.log(error);
 
-    const data = prepareSessionResponse(null)
-    store.dispatch(updateAuthInfo(data))
+    updateAuth(null)
 
     return Promise.resolve(null)
   })
@@ -40,14 +44,24 @@ export const tryRefreshSession = () => {
     const secret = localLoadAuth('secret')
     const id = localLoadAuth('id')
 
+    if (!secret || !id) {
+      updateAuth(null)
+      console.log('Нет данных об авторизации')
+      return resolve(null)
+    }
+
     fetchExtendSession(id, secret)
       .then(response => {
         if (response) {
-          const data = prepareSessionResponse(response)
-          store.dispatch(updateAuthInfo(data))
+          updateAuth(response)
         }
         
         resolve(response) // result: authResponse or null
       })
   })
+}
+
+function updateAuth(response) {
+  const data = prepareSessionResponse(response)
+  store.dispatch(updateAuthInfo(data))
 }

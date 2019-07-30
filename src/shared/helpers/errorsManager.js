@@ -1,6 +1,6 @@
 import { tryRefreshSession } from 'modules/Auth/epics/extendSession'
 
- const manageErrors = ({ retry, params }) => {
+ const manageErrors = ({ retry, params, defaultValue }) => {
   return error => {
     switch (error.response.status) {
       case 401:
@@ -8,8 +8,12 @@ import { tryRefreshSession } from 'modules/Auth/epics/extendSession'
           if (response) return retry(params)
           return Promise.resolve(response) // null
         })
+      // default:
+      //   return Promise.resolve(null)
       default:
-        return Promise.resolve(null)
+        return Promise.resolve(defaultValue ? {
+          data: defaultValue
+        } : null)
     }
   }
 }
