@@ -6,9 +6,11 @@ import Main from 'modules/LocalesManager';
 import SignIn from 'modules/Auth/SignIn';
 
 import { loadInitialInfo } from './actions'
+import { loadAuthInfo } from 'modules/Auth/actions'
 
 class App extends React.Component {
   componentDidMount() {
+    this.props.dispatch(loadAuthInfo())
     this.props.dispatch(loadInitialInfo())
   }
 

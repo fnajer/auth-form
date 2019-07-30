@@ -19,7 +19,7 @@ class SignInForm extends React.Component {
       this.props.dispatch(loadModelsList({
         code: this.props.language.code
       }))
-      
+
       this.props.history.push('/')
     } catch (e) {
       console.log(e)

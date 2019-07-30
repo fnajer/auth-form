@@ -1,13 +1,13 @@
 import { ofType } from 'redux-observable'
-import { map, switchMap, catchError } from 'rxjs/operators'
+import { map, catchError } from 'rxjs/operators'
 
 import {
   updateAuthInfo,
   loadAuthInfo,
 } from 'modules/Auth/actions'
 
+import { localLoadAuth } from 'shared/helpers/localStorage'
 import { saveToLocaleStorage } from './saveAuth'
-import { extendSession } from './extendSession'
 
 export function prepareSessionResponse(response) {
   let data
@@ -30,15 +30,20 @@ export function prepareSessionResponse(response) {
   return data
 }
 
+export function loadFromLocalStorage() {
+  return {
+    token: localLoadAuth('token'),
+    expires: localLoadAuth('expires'),
+    secret: localLoadAuth('secret'),
+    id: localLoadAuth('id'),
+  }
+}
+
 const loadAuthInfoEpic = action$ =>
   action$.pipe(
     ofType(loadAuthInfo),
-    switchMap(
-      action => extendSession(),
-      (action, response) => [response, action]
-    ),
-    map(([response, action]) => {
-      const data = prepareSessionResponse(response)
+    map(action => {
+      const data = loadFromLocalStorage()
       
       return updateAuthInfo(data)
     }),

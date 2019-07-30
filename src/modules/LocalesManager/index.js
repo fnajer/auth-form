@@ -25,7 +25,6 @@ class LocalesManager extends React.Component {
   }
 
   render() {
-    
     return (
       <MaterialTable
         title="Translations"
